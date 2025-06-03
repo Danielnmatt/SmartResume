@@ -4,6 +4,7 @@
 @theme {
 	--color-primary: #6a00ff;
 	--color-secondary: #ffd900;
+	--color-accent: #bfc219;
 }
 
 @custom-variant dark (&:where(.dark, .dark *));
@@ -22,8 +23,6 @@
 	--color-primary-foreground: var(--primary-foreground);
 	--color-muted: var(--muted);
 	--color-muted-foreground: var(--muted-foreground);
-	--color-accent: var(--accent);
-	--color-accent-foreground: var(--accent-foreground);
 	--color-destructive: var(--destructive);
 	--color-border: var(--border);
 	--color-input: var(--input);
