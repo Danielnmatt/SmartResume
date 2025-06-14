@@ -17,10 +17,10 @@ const Home = () => {
 
 		if (pdfFile) {
 			console.log("GOOBER");
-			//Must send pdfFile to backend
-			// axios.post("/uploadResume", pdfFile).catch((error) => {
-			// 	console.error("Error uploading file: ", error);
-			// });
+			// Must send pdfFile to backend
+			axios.post("/uploadResume", pdfFile).catch((error) => {
+				console.error("Error uploading file: ", error);
+			});
 		}
 	};
 
