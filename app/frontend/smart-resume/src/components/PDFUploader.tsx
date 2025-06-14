@@ -1,8 +1,13 @@
 import { useState } from "react";
 
-export default function PdfUploader() {
-	const [pdfFile, setPdfFile] = useState<File | null>(null);
-	const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+interface PDFUploaderProps {
+	setPdfFile: (file: File | null) => void;
+	previewUrl: string;
+	setPreviewUrl: (url: string) => void;
+	inputRef: React.RefObject<HTMLInputElement | null>;
+}
+
+export default function PdfUploader({ setPdfFile, previewUrl, setPreviewUrl, inputRef }: PDFUploaderProps) {
 	const [isInvalid, setIsInvalid] = useState(false);
 
 	const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
@@ -24,6 +29,7 @@ export default function PdfUploader() {
 	};
 
 	const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+		e.preventDefault();
 		const selectedFiles = e.target.files ? Array.from(e.target.files) : [];
 		const validFiles = selectedFiles.filter((f) => f.type === "application/pdf");
 
@@ -43,18 +49,18 @@ export default function PdfUploader() {
 	return (
 		<div className="flex flex-col items-center justify-center h-full bg-background">
 			<div
-				className="relative bg-gradient-to-br from-primary to-secondary w-full max-w-2xl p-8 rounded-lg shadow-lg"
+				className="relative bg-gradient-to-br from-primary to-secondary w-full p-8 rounded-lg shadow-lg"
 				onDragOver={(e) => e.preventDefault()}
 				onDrop={handleDrop}>
-				<div className="flex flex-col items-center justify-center h-[514px] rounded-md overflow-hidden relative">
+				<div className="flex flex-col items-center w-md justify-center h-[514px] rounded-md overflow-hidden relative">
 					{previewUrl ? (
-						<div
-							className="w-full h-full flex items-center justify-center"
-							style={{ transform: `scale(1)` }}>
-							<iframe
-								src={previewUrl + "#toolbar=0"}
-								title="PDF Preview"
-								className="w-full h-full"
+						<div className="w-full max-w-[400px] h-[500px] relative overflow-hidden sm:w-[400px] sm:h-[500px]">
+							<object
+								data={previewUrl + "#toolbar=0&navpanes=0"}
+								type="application/pdf"
+								width="100%"
+								height="550"
+								className="w-full h-full overflow-hidden"
 							/>
 						</div>
 					) : (
@@ -66,9 +72,10 @@ export default function PdfUploader() {
 
 					<input
 						type="file"
-						accept="applicatwion/pdf"
+						accept="application/pdf"
 						className="absolute inset-0 opacity-0 cursor-pointer"
 						onChange={handleFileInput}
+						ref={inputRef}
 					/>
 				</div>
 
