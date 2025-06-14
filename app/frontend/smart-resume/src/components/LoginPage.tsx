@@ -13,9 +13,7 @@ const LoginPage = () => {
     return (
         <div className="flex h-screen w-screen">
             <div className="m-auto h-5/6 w-7/24 flex flex-col items-center rounded-xl">
-            <div className=" bg-gradient-to-r from-cyan-700 to-cyan-100 rounded-full w-md h-1/6 justify-items-center content-center">
                 <h1 className="text-5xl mb-5">Smart Resume</h1>
-            </div>
                 {<PageView />}
             </div>
         </div>
@@ -40,6 +38,7 @@ const PageView = () => {
     const handleSubmit = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         //API Request
+        console.log(username, password)
         navigate('/')
     };
 
@@ -49,7 +48,7 @@ const PageView = () => {
             <h1 className={!toggleView ? "text-xl mt-10" : "hidden"}>
                 Enter the email address associated with your account we'll send you an email with a password reset link.
             </h1>
-            <div className="w-9/10 mt-12 h-4/5">
+            <div className="w-9/10 mt-12 h-4/5 p-4 border-[.5px] shadow-2xl">
                 <form className="flex flex-col">
                     <label htmlFor="username">{toggleView ? "Username" : "Email address"}</label>
                     <input
