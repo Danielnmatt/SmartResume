@@ -1,0 +1,21 @@
+<svg width="240" height="60" viewBox="0 0 240 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="grad-purple" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#a06aff"></stop>
+      <stop offset="100%" stop-color="#6a00ff"></stop>
+    </linearGradient>
+    <linearGradient id="grad-yellow" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffd900"></stop>
+      <stop offset="100%" stop-color="#ffeb66"></stop>
+    </linearGradient>
+  </defs>
+
+  <!-- Icon -->
+  <rect x="10" y="10" width="40" height="40" rx="8" fill="url(#grad-purple)"></rect>
+  <path d="M20 20h16v2H20v-2zm0 6h12v2H20v-2zm0 6h10v2H20v-2z" fill="#fff"></path>
+
+  <!-- Text -->
+  <text x="60" y="36" font-family="Segoe UI, sans-serif" font-weight="600" font-size="24" fill="url(#grad-yellow)">
+    Smart <tspan fill="url(#grad-purple)">Resume</tspan>
+  </text>
+</svg>

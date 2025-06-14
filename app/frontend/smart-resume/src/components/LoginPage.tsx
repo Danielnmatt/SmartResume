@@ -3,11 +3,6 @@ import ContinueWithGoogle from "./ContinueWithGoogle.tsx";
 import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router'
 
-// interface ViewToggle {
-//     toggleView: boolean;
-//     setToggleView: React.Dispatch<React.SetStateAction<boolean>>
-// }
-
 //TODO: Continue with google, Login logic, Forgot password email sending API
 const LoginPage = () => {
     return (

@@ -5,7 +5,7 @@ import { Toaster } from "./ui/sonner";
 import { toast } from "sonner";
 import axios from "../api/axios";
 import PulseLoader from "react-spinners/PulseLoader";
-import { Button } from "./ui/button";
+import Navbar from "./Navbar"
 
 //TODO: Handle Sign Up logic, Email verification upon sign up
 const SignUpPage = () => {
@@ -13,13 +13,13 @@ const SignUpPage = () => {
 
 	return (
 		<div className={`flex flex-col w-screen h-screen ${!isDark ? "" : "dark"}`}>
-			<button
+			{/* <button
 				onClick={() => {
 					setIsDark(!isDark);
 				}}
 				className="border-8 hover:cursor-pointer">
 				{isDark ? "Light" : "Dark"}
-			</button>
+			</button> */}
 			<div className="flex dark:bg-background h-screen w-screen">
 				<div className="m-auto h-5/6 w-9/24 flex flex-col items-center rounded-xl">
 					<h1 className="text-5xl mb-5 text-foreground">Smart Resume</h1>
