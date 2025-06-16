@@ -5,24 +5,16 @@ import { Toaster } from "./ui/sonner";
 import { toast } from "sonner";
 import axios from "../api/axios";
 import PulseLoader from "react-spinners/PulseLoader";
-import Navbar from "./Navbar"
+import { useTheme } from "./ThemeContext";
 
-//TODO: Handle Sign Up logic, Email verification upon sign up
+//TODO: Email verification upon sign up
 const SignUpPage = () => {
-	const [isDark, setIsDark] = useState(false);
+	const isDark = useTheme();
 
 	return (
 		<div className={`flex flex-col w-screen h-screen ${!isDark ? "" : "dark"}`}>
-			{/* <button
-				onClick={() => {
-					setIsDark(!isDark);
-				}}
-				className="border-8 hover:cursor-pointer">
-				{isDark ? "Light" : "Dark"}
-			</button> */}
-			<div className="flex dark:bg-background h-screen w-screen">
+			<div className="flex bg-background h-screen w-screen transition duration-1000">
 				<div className="m-auto h-5/6 w-9/24 flex flex-col items-center rounded-xl">
-					<h1 className="text-5xl mb-5 text-foreground">Smart Resume</h1>
 					{<PageView isDark={isDark} />}
 				</div>
 			</div>
@@ -82,28 +74,26 @@ const PageView = ({ isDark }: any) => {
 					},
 				},
 				actionButtonStyle: {
-					// background: "#FFF0F0",
 					background: "#ff6666",
-					color: "white"
+					color: "white",
 				},
 				duration: 5000,
 			});
-			console.log(email, password, confirmPassword);
 			console.error("Error signing up, please try again: " + e);
 		}
 	};
 
 	return (
 		<div className="flex flex-col items-center self-center justify-self-center h-4/5 w-full">
-			<h1 className="text-4xl text-foreground">Sign up</h1>
-			<div className="w-full dark:bg-card bg-card transition duration-500 rounded-lg shadow-lg shadow-primary mt-12 h-full p-4">
+			<h1 className="text-4xl text-foreground transition duration-1000">Sign up</h1>
+			<div className="w-full bg-card rounded-lg shadow-lg shadow-primary mt-12 h-full p-4 transition duration-1000">
 				<Toaster
 					theme={!isDark ? "light" : "dark"}
 					toastOptions={{ classNames: { description: "whitespace-pre" } }}
 					richColors={true}
 					position="top-right"
 				/>
-				<form className="flex flex-col text-card-foreground">
+				<form className="flex flex-col text-card-foreground transition duration-1000">
 					<label className="w-fit" htmlFor="email">
 						Email
 					</label>
@@ -112,7 +102,7 @@ const PageView = ({ isDark }: any) => {
 						id="email"
 						type="text"
 						placeholder="ExampleEmail@email.com"
-						className="bg-input mb-8 p-2 rounded-md w-full border-2 "
+						className="bg-input mb-8 p-2 rounded-md w-full border-2 text-foreground transition duration-1000"
 						value={email}
 						onChange={(e) => setEmail(e.target.value)}
 					/>
@@ -124,7 +114,7 @@ const PageView = ({ isDark }: any) => {
 						id="password"
 						type="password"
 						placeholder="Password must be at least 8 characters"
-						className="bg-input mb-8 p-2 rounded-md w-full border-2"
+						className="bg-input mb-8 p-2 rounded-md w-full border-2 text-foreground transition duration-1000"
 						value={password}
 						onChange={(e) => setPassword(e.target.value)}
 					/>
@@ -136,7 +126,7 @@ const PageView = ({ isDark }: any) => {
 						id="confirmPassword"
 						type="password"
 						placeholder="Must match above password"
-						className="bg-input mb-8 p-2 rounded-md w-full border-2"
+						className="bg-input mb-8 p-2 rounded-md w-full border-2 text-foreground transition duration-1000"
 						value={confirmPassword}
 						onChange={(e) => setConfirmPassword(e.target.value)}
 					/>
@@ -151,7 +141,7 @@ const PageView = ({ isDark }: any) => {
 
 					<button
 						type="button"
-						className="w-fit self-center hover:underline hover:cursor-pointer"
+						className="w-fit self-center hover:underline hover:cursor-pointer transition duration-1000"
 						onClick={() => navigate("/login")}>
 						{"< Back To Login"}
 					</button>

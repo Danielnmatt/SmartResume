@@ -4,7 +4,7 @@ import dotenv from "dotenv"
 dotenv.config()
 
 export const generateJWTToken = (res: Response, user : any) => {
-    const token = jwt.sign({user}, process.env.JWT_SECRET!, {
+    const token = jwt.sign({userID: user.id}, process.env.JWT_SECRET!, {
         expiresIn: "1d"
     })
 
@@ -12,7 +12,8 @@ export const generateJWTToken = (res: Response, user : any) => {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
-    }).status(201).json({success: true, user: {...user, password: undefined}})
+        expires: new Date(Date.now() + 24 * 60 * 60 * 1000)
+    }).status(201).json({success: true, user: { ...user, password: undefined}})
 
     return token;
 }

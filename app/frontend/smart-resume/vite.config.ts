@@ -11,8 +11,9 @@ export default defineConfig({
     },
   },
   server: {
-    allowedHosts: [
-      'shepherd-lay-italy-signs.trycloudflare.com'
-    ]
+    host: true,
+    port: 5173,
+    strictPort: true,
+    hmr: true
   }
 })

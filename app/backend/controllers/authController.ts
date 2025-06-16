@@ -16,16 +16,89 @@ const signup = async (req: Request, res: Response) => {
 
 	const verification_token = generateVerificationToken();
 
-	const query ="INSERT INTO users (email, password, verification_token, verification_token_expires_at) VALUES ($1, $2, $3, $4) RETURNING *";
-	conn.query(query, [email, hashedPassword, verification_token, new Date(Date.now() + 24 * 60 * 60 * 1000)], (err, result) => {
-        if(err){
-            res.status(500).json({error: "Failed to Signup"})
-            return
-        }
-        const user = result.rows[0];
-        generateJWTToken(res, user)
-    });
+	const query =
+		"INSERT INTO users (email, password, verification_token, verification_token_expires_at) VALUES ($1, $2, $3, $4) RETURNING *";
+	conn.query(
+		query,
+		[email, hashedPassword, verification_token, new Date(Date.now() + 24 * 60 * 60 * 1000)],
+		(err, result) => {
+			if (err) {
+				res.status(500).json({ error: "Failed to Signup" });
+				return;
+			}
+			const user = result.rows[0];
+			generateJWTToken(res, user);
+		}
+	);
 };
 
-export const authController = { signup };
+const login = async (req: Request, res: Response) => {
+	const { email, password } = req.body;
+	const query = "SELECT * FROM users WHERE email = $1";
+	conn.query(query, [email], async (err, result) => {
+		if (err) {
+			res.status(500).json({ error: "Failed to Login" });
+			return;
+		}
+		if (result.rows.length === 0) {
+			res.status(401).json({ error: "Incorrect email or password" });
+			return;
+		}
+		const isMatch = await bcrypt.compare(password, result.rows[0].password);
+		if (!isMatch) {
+			res.status(401).json({ error: "Incorrect email or password" });
+			return;
+		}
+
+		const user = result.rows[0];
+		generateJWTToken(res, user);
+	});
+};
+
+const getProfile = async (req: Request, res: Response) => {
+	const { token } = req.cookies;
+
+	if (!token) {
+		return;
+	}
+
+	try {
+		const decoded = jwt.verify(token, process.env.JWT_SECRET!);
+		(<any>req).id = (<any>decoded).userID;
+
+		const userId = (<any>req).id;
+		const query = "SELECT id, email FROM users WHERE id = $1";
+
+		conn.query(query, [userId], (err, result) => {
+			if (err) {
+				res.status(500).json({ error: "Failed to fetch user profile" });
+				return;
+			}
+
+			res.status(200).json(result.rows[0]);
+		});
+	} 
+	catch (err) {
+		return;
+	}
+};
+
+const authenticateUser = (req: Request, res: Response, next: Function) => {
+	const { token } = req.cookies;
+
+	if (!token) {
+		res.status(401).json({ error: "Not authenticated" });
+	}
+
+	try {
+		const decoded = jwt.verify(token, process.env.JWT_SECRET!);
+		(<any>req).id = (<any>decoded).userID;
+		next();
+	} catch (err) {
+		res.status(403).json({ error: "Invalid or expired token" });
+		return;
+	}
+};
+
+export const authController = { signup, login, authenticateUser, getProfile };
 export default authController;

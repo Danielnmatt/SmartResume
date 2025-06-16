@@ -1,10 +1,13 @@
 import "../styles/tailwind.css";
-
+import {useTheme} from "./ThemeContext"
 const ContinueWithGoogle = () => {
+    const isDark = useTheme()
+
+    //  "data-[active=true]:focus:bg-accent data-[active=true]:hover:bg-accent data-[active=true]:bg-accent/50 data-[active=true]:text-accent-foreground hover:bg-primary-200 dark:hover:bg-primary-800 hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:ring-ring/50 [&_svg:not([class*='text-'])]:text-muted-foreground flex flex-col gap-1 rounded-sm p-2 text-sm transition-all outline-none focus-visible:ring-[3px] focus-visible:outline-1 [&_svg:not([class*='size-'])]:size-4"
     return (
         <button
             type="button"
-            className="self-center max-w-[320px] flex px-[1.4rem] py-2 text-[0.875rem] leading-5 font-bold text-center align-middle items-center rounded-lg border-[1px] border-[rgba(0,0,0,0.25)] gap-3 text-[rgb(65,_63,_63)] bg-[#fff] cursor-pointer [transition:all_.6s_ease]">
+            className={`${!isDark ? "hover:bg-primary-200 transition duration-500 border-black" : "hover:bg-primary-900 border-white"} bg-transparent border-[1px] text-foreground self-center max-w-[320px] flex px-[1.4rem] py-2 text-[0.875rem] font-bold text-center align-middle items-center rounded-lg gap-3 cursor-pointer h-14 transition duration-1000`}>
             <svg
                 xmlns="http://www.w3.org/2000/svg"
                 preserveAspectRatio="xMidYMid"

@@ -47,7 +47,7 @@ export default function PdfUploader({ setPdfFile, previewUrl, setPreviewUrl, inp
 	};
 
 	return (
-		<div className="flex flex-col items-center justify-center h-full bg-background">
+		<div className="flex flex-col items-center justify-center h-full bg-background transition duration-1000">
 			<div
 				className="relative bg-gradient-to-br from-primary to-secondary w-full p-8 rounded-lg shadow-lg"
 				onDragOver={(e) => e.preventDefault()}
@@ -65,7 +65,7 @@ export default function PdfUploader({ setPdfFile, previewUrl, setPreviewUrl, inp
 						</div>
 					) : (
 						<div className="flex flex-col items-center justify-center">
-							<UploadIcon className="w-12 h-12 text-muted-foreground" />
+							<UploadIcon className="w-12 h-12 text-white transition duration-1000" />
 							<p className="mt-4 text-white">Drag & drop a PDF here, or click to choose</p>
 						</div>
 					)}
