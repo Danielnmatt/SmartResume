@@ -1,7 +1,7 @@
 import { useEffect, useContext, useState, createContext } from "react";
 
-const ThemeContext = createContext({});
-const ThemeUpdateContext = createContext(() => {});
+const ThemeContext = createContext<boolean>(false);
+const ThemeUpdateContext = createContext<() => void>(() => {});
 
 export const useTheme = () => {
 	return useContext(ThemeContext);
@@ -11,24 +11,22 @@ export const useThemeUpdate = () => {
 	return useContext(ThemeUpdateContext);
 };
 
-export const ThemeProvider = ({ children }: any) => {
+export const ThemeProvider = ({ children }: React.PropsWithChildren) => {
 	const [isDark, setIsDark] = useState<boolean>(false);
 
 	useEffect(() => {
-		if(!localStorage.getItem("theme")){
+		if (!localStorage.getItem("theme")) {
 			localStorage.setItem("theme", "light");
-		}
-		else if(localStorage.getItem("theme") === "dark"){
-			setIsDark(true)
-		}
-		else{
+		} else if (localStorage.getItem("theme") === "dark") {
+			setIsDark(true);
+		} else {
 			setIsDark(false);
 		}
-	}, [])
+	}, []);
 
 	const toggleTheme = () => {
 		setIsDark((prevTheme) => !prevTheme);
-		localStorage.setItem("theme", localStorage.getItem("theme") === "dark" ? "light" : "dark")
+		localStorage.setItem("theme", localStorage.getItem("theme") === "dark" ? "light" : "dark");
 	};
 
 	return (

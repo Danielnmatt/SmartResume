@@ -1,15 +1,27 @@
-import "../styles/tailwind.css";
-import { useState } from "react";
+import "../../styles/tailwind.css";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { Toaster } from "./ui/sonner";
+import { Toaster } from "../ui/sonner";
 import { toast } from "sonner";
-import axios from "../api/axios";
+import axios from "../../api/axios";
 import PulseLoader from "react-spinners/PulseLoader";
-import { useTheme } from "./ThemeContext";
+import { useTheme } from "../context/ThemeContext";
+import { useUser } from "../context/UserContext";
 
+interface SignUpProps {
+	isDark: boolean;
+}
 //TODO: Email verification upon sign up
-const SignUpPage = () => {
+const SignUp = () => {
 	const isDark = useTheme();
+	const user = useUser();
+	const navigate = useNavigate();
+
+	useEffect(() => {
+		if (user) {
+			navigate("/");
+		}
+	}, []);
 
 	return (
 		<div className={`flex flex-col w-screen h-screen ${!isDark ? "" : "dark"}`}>
@@ -22,7 +34,7 @@ const SignUpPage = () => {
 	);
 };
 
-const PageView = ({ isDark }: any) => {
+const PageView = ({ isDark }: SignUpProps) => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
@@ -151,4 +163,4 @@ const PageView = ({ isDark }: any) => {
 	);
 };
 
-export default SignUpPage;
+export default SignUp;

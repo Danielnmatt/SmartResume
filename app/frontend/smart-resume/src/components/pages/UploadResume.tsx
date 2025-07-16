@@ -1,38 +1,60 @@
-import "../styles/tailwind.css";
+import "../../styles/tailwind.css";
 import { useState, useRef } from "react";
-import PDFUploader from "./PDFUploader";
-import { Button } from "./ui/button";
-import { Toaster } from "./ui/sonner";
+import PDFUploader from "../PDFUploader";
+import { Button } from "../ui/button";
+import { Toaster } from "../ui/sonner";
 import { toast } from "sonner";
-import axios from "../api/axios";
-import { useTheme } from "./ThemeContext";
+import axios from "../../api/axios";
+import { useTheme } from "../context/ThemeContext";
+import { useUser } from "../context/UserContext";
 
 const UploadResume = () => {
 	const [pdfFile, setPdfFile] = useState<File | null>(null);
 	const [previewUrl, setPreviewUrl] = useState<string>("");
 	const inputRef = useRef<HTMLInputElement | null>(null);
 	const isDark = useTheme();
+	const user = useUser();
 
 	const handleSubmit = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
 		if (!pdfFile) {
 			return;
 		}
-		try {
-			// Must send pdfFile to backend
-			const response = await axios.post("/uploadresume", pdfFile);
 
-			if (response.data.success) {
-				toast.success("Resume Uploaded", {
-					duration: 5000,
-					description: "Finding jobs...",
-				});
-			}
-		} catch (e) {
-			toast.error("Failed To Upload Resume", {
-				duration: 5000,
-				description: "Try again shortly...",
+		toast.success("Resume Uploaded", {
+			duration: 5000,
+			description: "Processing Resume...",
+		});
+
+		let errorMessage = "";
+		try {
+			const formData = new FormData();
+			formData.append("resume", pdfFile);
+			const response = await axios.post("/users/analyzeresume", formData, {
+				headers: { "Content-Type": "multipart/form-data" },
 			});
+
+			if (!response || !response.data || !response.data.response) {
+				return;
+			}
+
+			if (response.data.response.toString().trim().toLowerCase() == "not a resume") {
+				errorMessage = "This doesn't look like a resume, please try again.";
+				throw new DOMException();
+			}
+
+			const result = response.data.response.replaceAll("```", "").replace("json", "");
+			const obj = JSON.parse(result);
+			const response2 = await axios.post("/users/storeresume", { obj: obj, userID: user.userID });
+			console.log(response2);
+		} catch (e) {
+			setTimeout(() => {
+				toast.error(`${errorMessage ? errorMessage : "Failed To Process Resume"}`, {
+					duration: 5000,
+					description: "Try again shortly...",
+				});
+			}, 1000);
+			console.log(e);
 		}
 	};
 

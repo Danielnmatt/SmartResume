@@ -4,7 +4,6 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import pg from "pg";
 import helmet from "helmet";
-import { OpenAI } from "openai";
 import usersRoutes from "./routes/usersRoute";
 import authRoutes from "./routes/authRoute";
 dotenv.config();
@@ -33,7 +32,7 @@ app.use(cookieParser());
 app.use(
 	cors({
 		origin: "http://localhost:5173",
-		credentials: true
+		credentials: true,
 	})
 );
 app.use(helmet());

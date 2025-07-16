@@ -1,12 +1,12 @@
-import "../styles/tailwind.css";
-import ContinueWithGoogle from "./ContinueWithGoogle.tsx";
+import "../../styles/tailwind.css";
+import ContinueWithGoogle from "../../assets/ContinueWithGoogle.tsx";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { Toaster } from "./ui/sonner";
+import { Toaster } from "../ui/sonner";
 import { toast } from "sonner";
-import { useTheme } from "./ThemeContext";
-import axios from "../api/axios";
-import { useUser } from "./UserContext";
+import { useTheme } from "../context/ThemeContext.tsx";
+import axios from "../../api/axios";
+import { useUser } from "../context/UserContext.tsx";
 
 //TODO: Continue with google, Login logic, Forgot password email sending API
 const LoginPage = () => {
@@ -31,11 +31,11 @@ const LoginPage = () => {
 
 const PageView = () => {
 	const isDark = useTheme();
-	const [email, setEmail] = useState("");
-	const [password, setPassword] = useState("");
-	const [fpEmail, setfpEmail] = useState("");
-	const [defaultView, setDefaultView] = useState(true); //True = login page, False = Forgot Password Page
 	const navigate = useNavigate();
+	const [email, setEmail] = useState<string>("");
+	const [password, setPassword] = useState<string>("");
+	const [fpEmail, setfpEmail] = useState<string>("");
+	const [defaultView, setDefaultView] = useState<boolean>(true); //True = login page, False = Forgot Password Page
 
 	const resetInputs = () => {
 		setEmail("");
@@ -144,7 +144,7 @@ const PageView = () => {
 						Forgot password?
 					</button>
 					<button
-						onClick={(e: React.MouseEvent<HTMLButtonElement>) => handleSubmit(e)}
+						onClick={(e) => handleSubmit(e)}
 						className="w-10/12 self-center px-1 py-1 inline-flex items-center justify-center text-white text-[18px] whitespace-nowrap cursor-pointer rounded-full bg-[linear-gradient(135deg,var(--color-primary-700),var(--color-secondary-700))] hover:outline-none active:outline-none mb-6">
 						<span className="bg-[rgb(5,6,45)] w-full px-6 py-4 rounded-full transition-all duration-500 ease-in-out hover:bg-transparent">
 							{defaultView ? "Login" : "Submit"}
@@ -154,7 +154,7 @@ const PageView = () => {
 						<ContinueWithGoogle />
 						<button
 							type="button"
-							className={`${!isDark ? "hover:bg-primary-200 transition duration-500 border-black" : "hover:bg-primary-900 border-white"} bg-transparent border-[1px] text-foreground self-center w-55 flex px-[1.4rem] py-2 text-[0.875rem] font-bold justify-center items-center rounded-lg gap-3 cursor-pointer h-14 transition duration-1000`}
+							className="hover:bg-primary-200 dark:hover:bg-primary-900 border-foreground bg-transparent border-[1px] text-foreground self-center w-55 flex px-[1.4rem] py-2 text-[0.875rem] font-bold justify-center items-center rounded-lg gap-3 cursor-pointer h-14 transition duration-1000"
 							onClick={() => navigate("/signup")}>
 							Sign up
 						</button>

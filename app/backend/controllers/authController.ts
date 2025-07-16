@@ -55,10 +55,28 @@ const login = async (req: Request, res: Response) => {
 	});
 };
 
-const getProfile = async (req: Request, res: Response) => {
+const logout = (req: Request, res: Response) => {
+    try{
+        res.clearCookie("token", {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+            sameSite: "strict",
+        });
+        res.status(200).json({success: true});
+		return
+    }
+    catch(e){
+        res.status(500).send({error: "Logging out User failed."});
+		return
+    }
+}
+
+
+const getProfile = (req: Request, res: Response) => {
 	const { token } = req.cookies;
 
 	if (!token) {
+		res.status(403).json()
 		return;
 	}
 
@@ -79,6 +97,7 @@ const getProfile = async (req: Request, res: Response) => {
 		});
 	} 
 	catch (err) {
+		res.status(500).json({ error: "Server error." });
 		return;
 	}
 };
@@ -93,6 +112,9 @@ const authenticateUser = (req: Request, res: Response, next: Function) => {
 	try {
 		const decoded = jwt.verify(token, process.env.JWT_SECRET!);
 		(<any>req).id = (<any>decoded).userID;
+		if(req.body && req.body.userID && (<any>decoded).userID !== req.body.userID){
+			throw new Error();
+		}
 		next();
 	} catch (err) {
 		res.status(403).json({ error: "Invalid or expired token" });
@@ -100,5 +122,5 @@ const authenticateUser = (req: Request, res: Response, next: Function) => {
 	}
 };
 
-export const authController = { signup, login, authenticateUser, getProfile };
+export const authController = { signup, login, logout, authenticateUser, getProfile };
 export default authController;
