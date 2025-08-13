@@ -1,16 +1,12 @@
 import "../../styles/tailwind.css";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { Toaster } from "../ui/sonner";
 import { toast } from "sonner";
 import axios from "../../api/axios";
 import PulseLoader from "react-spinners/PulseLoader";
 import { useTheme } from "../context/ThemeContext";
 import { useUser } from "../context/UserContext";
 
-interface SignUpProps {
-	isDark: boolean;
-}
 //TODO: Email verification upon sign up
 const SignUp = () => {
 	const isDark = useTheme();
@@ -27,14 +23,14 @@ const SignUp = () => {
 		<div className={`flex flex-col w-screen h-screen ${!isDark ? "" : "dark"}`}>
 			<div className="flex bg-background h-screen w-screen transition duration-1000">
 				<div className="m-auto h-5/6 w-9/24 flex flex-col items-center rounded-xl">
-					{<PageView isDark={isDark} />}
+					{<PageView />}
 				</div>
 			</div>
 		</div>
 	);
 };
 
-const PageView = ({ isDark }: SignUpProps) => {
+const PageView = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
@@ -44,7 +40,8 @@ const PageView = ({ isDark }: SignUpProps) => {
 	const handleSignUp = async (e: React.MouseEvent<HTMLButtonElement>) => {
 		e.preventDefault();
 		let errorMessage = "";
-		const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+		const emailRegex = /^[a-zA-Z0-9]+(?:[._-][a-zA-Z0-9]+)*@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}$/;
+		const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
 		if (!email || !password || !confirmPassword) {
 			errorMessage += "All fields must be filled.\n";
@@ -53,16 +50,33 @@ const PageView = ({ isDark }: SignUpProps) => {
 			errorMessage += "Passwords must match.\n";
 		}
 		if (email && !emailRegex.test(email)) {
-			errorMessage += "Invalid email address.\n";
+			errorMessage += "Invalid email address format.\n";
 		}
-		if (password && confirmPassword && password === confirmPassword && password.length < 8) {
-			errorMessage += "Password must be at least 8 characters long.\n";
+		if (password && !passwordRegex.test(password)) {
+			errorMessage += "Password must:\n- Be at least 8 characters long\n- Include at least one uppercase letter\n- Include at least one lowercase letter\n- Include at least one number\n";
+		}
+
+		if (errorMessage) {
+			toast.error("Signup Error", {
+				description: errorMessage,
+				closeButton: true,
+				action: {
+					label: "Clear Input Fields",
+					onClick: () => {
+						setEmail(""), setPassword(""), setConfirmPassword("");
+					},
+				},
+				actionButtonStyle: {
+					background: "#ff6666",
+					color: "white",
+					alignSelf: "end"
+				},
+				duration: 500000,
+			});
+			return;
 		}
 
 		try {
-			if (errorMessage != "") {
-				throw new DOMException();
-			}
 			const response = await axios.post("/auth/signup", { email, password });
 			if (response.data.success) {
 				toast.success("Signup was successful", {
@@ -77,7 +91,7 @@ const PageView = ({ isDark }: SignUpProps) => {
 			}
 		} catch (e) {
 			toast.error("Error Signing Up", {
-				description: `${errorMessage ? errorMessage : ""}`,
+				description: "An error occurred while creating your account. Please try again.",
 				closeButton: true,
 				action: {
 					label: "Clear Input Fields",
@@ -89,7 +103,7 @@ const PageView = ({ isDark }: SignUpProps) => {
 					background: "#ff6666",
 					color: "white",
 				},
-				duration: 5000,
+				duration: 500000,
 			});
 			console.error("Error signing up, please try again: " + e);
 		}
@@ -99,12 +113,6 @@ const PageView = ({ isDark }: SignUpProps) => {
 		<div className="flex flex-col items-center self-center justify-self-center h-4/5 w-full">
 			<h1 className="text-4xl text-foreground transition duration-1000">Sign up</h1>
 			<div className="w-full bg-card rounded-lg shadow-lg shadow-primary mt-12 h-full p-4 transition duration-1000">
-				<Toaster
-					theme={!isDark ? "light" : "dark"}
-					toastOptions={{ classNames: { description: "whitespace-pre" } }}
-					richColors={true}
-					position="top-right"
-				/>
 				<form className="flex flex-col text-card-foreground transition duration-1000">
 					<label className="w-fit" htmlFor="email">
 						Email
@@ -125,7 +133,7 @@ const PageView = ({ isDark }: SignUpProps) => {
 						autoComplete="off"
 						id="password"
 						type="password"
-						placeholder="Password must be at least 8 characters"
+						placeholder="At least 8 characters, 1 uppercase letter, 1 lowercase letter, and 1 number"
 						className="bg-input mb-8 p-2 rounded-md w-full border-2 text-foreground transition duration-1000"
 						value={password}
 						onChange={(e) => setPassword(e.target.value)}

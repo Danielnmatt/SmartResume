@@ -2,7 +2,6 @@ import "../../styles/tailwind.css";
 import ContinueWithGoogle from "../../assets/ContinueWithGoogle.tsx";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
-import { Toaster } from "../ui/sonner";
 import { toast } from "sonner";
 import { useTheme } from "../context/ThemeContext.tsx";
 import axios from "../../api/axios";
@@ -30,7 +29,6 @@ const LoginPage = () => {
 };
 
 const PageView = () => {
-	const isDark = useTheme();
 	const navigate = useNavigate();
 	const [email, setEmail] = useState<string>("");
 	const [password, setPassword] = useState<string>("");
@@ -105,12 +103,6 @@ const PageView = () => {
 			<h1 className={!defaultView ? "text-xl mt-10" : "hidden"}>
 				Enter the email address associated with your account we'll send you an email with a password reset link.
 			</h1>
-			<Toaster
-				theme={!isDark ? "light" : "dark"}
-				toastOptions={{ classNames: { description: "whitespace-pre" } }}
-				richColors={true}
-				position="top-right"
-			/>
 			<div className="w-full mt-12 h-4/5 p-4 rounded-lg shadow-lg shadow-primary bg-card transition duration-1000">
 				<form className="flex flex-col text-foreground ">
 					<label htmlFor="email" className="transition duration-1000">

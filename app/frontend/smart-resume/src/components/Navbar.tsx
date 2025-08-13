@@ -42,7 +42,7 @@ const Navbar = () => {
 
 	return (
 		<div className={!isDark ? "" : "dark"}>
-			<Toaster position="top-right" richColors={true} theme={`${!isDark ? "light" : "dark"}`} />
+			<Toaster position="top-right" richColors={true} theme={`${!isDark ? "light" : "dark"}`} toastOptions={{ classNames: { description: "whitespace-pre, text-wrap",} }} />
 			<NavigationMenu className="bg-card shadow-lg transition duration-1000 shadow-primary-300 hover:shadow-primary dark:shadow-primary dark:hover:shadow-primary-300">
 				<NavigationMenuList className="flex flex-row w-screen gap-2">
 					<NavigationMenuItem>

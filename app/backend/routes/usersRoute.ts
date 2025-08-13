@@ -1,5 +1,4 @@
 import express, {Request, Response} from "express"
-import {conn} from "../server"
 import {usersController} from '../controllers/usersController'
 import authController from "../controllers/authController";
 import {upload} from '../controllers/usersController'

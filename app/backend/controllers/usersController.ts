@@ -25,15 +25,23 @@ const storeResume = (req: Request, res: Response) => {
     if(!req.body || !req.body.userID || !req.body.obj){
         res.status(400).json({success: false});
     }
+    /*
     
+    INSERT INTO users (userID, keywords)
+    VALUES (req.body.userID, req.body.obj)
+    ON CONFLICT (userID)
+    DO UPDATE SET keywords = req.body.obj;
+    
+    */
     const query = "INSERT INTO data (user_id, content) VALUES ($1, $2)";
-    conn.query(query, [req.body.userID, req.body.obj], (err, result) => {
-        if (err) {
-            res.status(500).json({ error: "Failed to save resume" });
-            return;
-        }
-    });
-    res.status(201).json({success: true})
+    try{
+        conn.query(query, [req.body.userID, req.body.obj]);
+        res.status(201).json({success: true})
+    }
+    catch(err){
+        console.error(err);
+        res.status(500).json({success: false, error: "Failed to store resume"});
+    }
 }
 
 

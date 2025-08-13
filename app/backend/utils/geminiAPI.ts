@@ -23,7 +23,7 @@ export async function analyzeResume(path: string): Promise<string | null> {
 		{
 			"keywords" : ["keyword1", "keyword2", "keyword3", ...],
 			"recommendations" : { "rec1": {"action": "action1", "example": "example1"}, "rec2": {"action": "action2", "example": "example2"}, "rec3": {"action": "action3", "example": "example3"}},
-			"best_jobs" : ["bestjob1", "bestjob2", "bestjob3"]
+			"best_job" : ["bestjob1", "bestjob2", "bestjob3"]
 		}
 1.  Carefully extract all keywords from the "Skills" section and only the most relevant keywords from the "Projects/Experience" sections. List these keywords from most relevant to least relevant and avoid using acronyms.
 2.  Provide 3 specific, actionable recommendations for improving the resume and give specific examples. 

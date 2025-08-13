@@ -2,7 +2,7 @@ import "../../styles/tailwind.css";
 import { useState, useRef } from "react";
 import PDFUploader from "../PDFUploader";
 import { Button } from "../ui/button";
-import { Toaster } from "../ui/sonner";
+import { useNavigate} from "react-router";
 import { toast } from "sonner";
 import axios from "../../api/axios";
 import { useTheme } from "../context/ThemeContext";
@@ -12,6 +12,7 @@ const UploadResume = () => {
 	const [pdfFile, setPdfFile] = useState<File | null>(null);
 	const [previewUrl, setPreviewUrl] = useState<string>("");
 	const inputRef = useRef<HTMLInputElement | null>(null);
+	const navigate = useNavigate();
 	const isDark = useTheme();
 	const user = useUser();
 
@@ -46,7 +47,25 @@ const UploadResume = () => {
 			const result = response.data.response.replaceAll("```", "").replace("json", "");
 			const obj = JSON.parse(result);
 			const response2 = await axios.post("/users/storeresume", { obj: obj, userID: user.userID });
-			console.log(response2);
+			if (response2.status === 201) {
+				toast.success("Resume Processed Successfully", {
+					duration: 5000,
+					description: "You can now view your resume in the dashboard.",
+					action: {
+						label: "View Job Matches",
+						onClick: () => {
+							navigate("/matches")
+						}
+					},
+				});
+				setPdfFile(null);
+				setPreviewUrl("");
+				if (inputRef.current) {
+					inputRef.current.value = "";
+				}
+
+				localStorage.setItem("resume-data", JSON.stringify(obj));
+			}
 		} catch (e) {
 			setTimeout(() => {
 				toast.error(`${errorMessage ? errorMessage : "Failed To Process Resume"}`, {
@@ -89,12 +108,6 @@ const UploadResume = () => {
 	return (
 		<div className={`${!isDark ? "" : "dark"}`}>
 			<div className={"flex flex-col h-screen w-screen bg-background transition duration-1000"}>
-				<Toaster
-					theme={!isDark ? "light" : "dark"}
-					toastOptions={{ classNames: { description: "whitespace-pre" } }}
-					richColors={true}
-					position="top-right"
-				/>
 				<div className="flex flex-row ml-auto mr-auto mt-8 ">
 					<div className="flex flex-col w-fit ml-8 mt-8">
 						<PDFUploader

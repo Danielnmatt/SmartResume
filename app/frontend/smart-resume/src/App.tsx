@@ -10,6 +10,7 @@ const SignUpPage = lazy(() => import("./components/pages/SignUp"));
 const Home = lazy(() => import("./components/pages/Home"));
 const UploadResume = lazy(() => import("./components/pages/UploadResume"));
 const NotFound = lazy(() => import("./components/pages/NotFound"));
+const JobMatches = lazy(() => import("./components/pages/JobMatches"));
 
 function App() {
 	return (
@@ -24,6 +25,7 @@ function App() {
 								<Route path="/uploadResume" element={<UploadResume />} />
 								<Route path="/login" element={<LoginPage />} />
 								<Route path="/signup" element={<SignUpPage />} />
+								<Route path="/matches" element={<JobMatches />} />
 								<Route path="/" element={<Home />} />
 							</Routes>
 						</Suspense>
